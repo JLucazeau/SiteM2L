@@ -64,7 +64,7 @@
                     Offres d'emploi
                 </a>
 
-                <a class="navbar-item" >
+                <a class="navbar-item" href="../reservation">
                     Reservation de salle
                 </a>
 
@@ -79,6 +79,15 @@
                 <div class="navbar-item">
                     <?=$_SESSION['user_email']?>&nbsp;Connecté(e).
                 </div>
+                <?php
+                        if ($_SESSION['statut']==='admin') {
+                            ?>
+                <a class="navbar-item" href="../administration">
+                    Administrer
+                </a>
+                <?php
+                        }
+                    ?>
                 <div class="navbar-item">
                     <div class="buttons">
                         <a class="button is-link" href="../connexion/disconnect.php"><strong>Se déconnecter</strong></a>

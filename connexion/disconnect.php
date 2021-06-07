@@ -57,7 +57,7 @@ session_destroy();
                         Offres d'emploi
                     </a>
 
-                    <a class="navbar-item">
+                    <a class="navbar-item" href="../reservation">
                         Resevation de salle
                     </a>
 

@@ -44,13 +44,6 @@ if (isset($_POST['postuler'])) {
                         <script src="../js/search-pressing-enter.js"></script>
                     </div>
                     <a class="navbar-item" href="poster.php">Poster</a>
-                    <?php
-                        if ($_SESSION['statut']==='admin') {
-                            ?>
-                    <a class="navbar-item">Administrer</a>
-                    <?php
-                        }
-                    ?>
                 </div>
             </div>
         </div>
