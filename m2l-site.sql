@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 03 juin 2021 à 23:17
+-- Généré le :  lun. 07 juin 2021 à 02:59
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -61,6 +61,33 @@ INSERT INTO `offre` (`offre_id`, `offre_titre`, `offre_categorie`, `offre_entrep
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `plage_horaire`
+--
+
+DROP TABLE IF EXISTS `plage_horaire`;
+CREATE TABLE IF NOT EXISTS `plage_horaire` (
+  `plage_id` int(5) NOT NULL AUTO_INCREMENT,
+  `heure_debut` time NOT NULL,
+  `heure_fin` time NOT NULL,
+  PRIMARY KEY (`plage_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `plage_horaire`
+--
+
+INSERT INTO `plage_horaire` (`plage_id`, `heure_debut`, `heure_fin`) VALUES
+(1, '08:00:00', '10:00:00'),
+(2, '10:00:00', '12:00:00'),
+(3, '12:00:00', '14:00:00'),
+(4, '14:00:00', '16:00:00'),
+(5, '16:00:00', '18:00:00'),
+(6, '18:00:00', '20:00:00'),
+(7, '20:00:00', '22:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `preference`
 --
 
@@ -84,6 +111,64 @@ INSERT INTO `preference` (`preference_id`, `preference_type`, `preference_user`,
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `reservation`
+--
+
+DROP TABLE IF EXISTS `reservation`;
+CREATE TABLE IF NOT EXISTS `reservation` (
+  `reservation_id` int(5) NOT NULL AUTO_INCREMENT,
+  `reservation_titre` varchar(50) NOT NULL,
+  `reservation_date` date NOT NULL,
+  `reservation_user_id` int(5) NOT NULL,
+  `reservation_salle_id` int(5) NOT NULL,
+  `reservation_plage_id` int(5) NOT NULL,
+  PRIMARY KEY (`reservation_id`),
+  KEY `fk_reservation_user_id` (`reservation_user_id`),
+  KEY `fk_reservation_salle_id` (`reservation_salle_id`),
+  KEY `fk_reservation_plage_id` (`reservation_plage_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO `reservation` (`reservation_id`, `reservation_titre`, `reservation_date`, `reservation_user_id`, `reservation_salle_id`, `reservation_plage_id`) VALUES
+(1, 'Reservation n°1', '2021-06-07', 1, 18, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `salle`
+--
+
+DROP TABLE IF EXISTS `salle`;
+CREATE TABLE IF NOT EXISTS `salle` (
+  `salle_id` int(5) NOT NULL AUTO_INCREMENT,
+  `salle_nom` varchar(50) NOT NULL,
+  `salle_description` varchar(500) NOT NULL,
+  `salle_qte` int(5) NOT NULL,
+  PRIMARY KEY (`salle_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `salle`
+--
+
+INSERT INTO `salle` (`salle_id`, `salle_nom`, `salle_description`, `salle_qte`) VALUES
+(11, 'Majorelle', 'Salles de réunion - Grande', 50),
+(12, 'Gruber', 'Salles de réunion - Moyenne', 30),
+(13, 'Longwy', 'Salles de réunion - Petite', 15),
+(14, 'Daum', 'Salles de réunion - Moyenne', 30),
+(15, 'Gallé', 'Salles de réunion - Moyenne', 30),
+(16, 'Corbin', 'Salles de réunion - Moyenne', 30),
+(17, 'Baccarat', 'Salles de réunion - Moyenne', 30),
+(18, 'Amphithéatre', 'Pour les assemblés générales ou pour d\'autre réunions importantes.', 200),
+(19, 'La salle de convivialité', 'Pour les repas \" traiteur\" qui suivent les réunions.', 50),
+(20, 'La salle multimédia', 'Dediée aux stages de formation a inscription libez proposé par le CROSL ou pour les stages organisé par les ligues.', 25);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `user`
 --
 
@@ -94,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_email` varchar(100) NOT NULL,
   `user_password` varchar(50) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
@@ -103,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`user_id`, `statut`, `user_email`, `user_password`) VALUES
 (1, 'admin', 'admin', 'admin'),
 (2, 'admin', 'JuryE4', 'JuryE4'),
-(3, 'user', 'j.bertelle@gmail.com', 'azerty');
+(5, 'user', 'user1', 'user1');
 
 --
 -- Contraintes pour les tables déchargées
@@ -114,6 +199,14 @@ INSERT INTO `user` (`user_id`, `statut`, `user_email`, `user_password`) VALUES
 --
 ALTER TABLE `offre`
   ADD CONSTRAINT `offre_ibfk_1` FOREIGN KEY (`offre_createur`) REFERENCES `user` (`user_id`);
+
+--
+-- Contraintes pour la table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `fk_reservation_plage_id` FOREIGN KEY (`reservation_plage_id`) REFERENCES `plage_horaire` (`plage_id`),
+  ADD CONSTRAINT `fk_reservation_salle_id` FOREIGN KEY (`reservation_salle_id`) REFERENCES `salle` (`salle_id`),
+  ADD CONSTRAINT `fk_reservation_user_id` FOREIGN KEY (`reservation_user_id`) REFERENCES `user` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
